@@ -3960,7 +3960,7 @@ async function geminiCall(prompt, imageParts, maxTokens=1000){
   const key=window.GEMINI_API_KEY||'';
   if(!key) throw new Error('Clé API Gemini manquante — configure-la dans Réglages');
   const parts=imageParts?[...imageParts,{text:prompt}]:[{text:prompt}];
-  const resp=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+key,{
+  const resp=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+key,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({contents:[{role:'user',parts}],generationConfig:{maxOutputTokens:maxTokens,temperature:0.7}})
   });
@@ -3973,7 +3973,7 @@ async function geminiChat(systemPrompt, messages, maxTokens=500){
   const key=window.GEMINI_API_KEY||'';
   if(!key) throw new Error('Clé API Gemini manquante — configure-la dans Réglages');
   const contents=messages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
-  const resp=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+key,{
+  const resp=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+key,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({system_instruction:{parts:[{text:systemPrompt}]},contents,generationConfig:{maxOutputTokens:maxTokens,temperature:0.7}})
   });
@@ -4000,8 +4000,9 @@ function openPumpkinChat(ueKey, sem){
     _chatOpen=true;
     panel.classList.add('open');
     if(!_chatHistory.length){
-      const syl=getSyl(_chatUeKey||ueKey);
-      const name=syl?syl.name:(_chatUeKey||ueKey||'ce cours');
+      const _gKey=_chatUeKey||ueKey||currentUE||'';
+      const syl=_gKey?getSyl(_gKey):null;
+      const name=syl?syl.name:(_gKey||'ce cours');
       _addChatMsg('pumpkin','Bonjour ! Je suis <strong>Pumpkin</strong> 🐿️ Je connais le syllabus de <strong>'+name+'</strong>. Qu\u0027est-ce qui te pose probl\u00e8me ? Je peux expliquer, donner des exemples, reformuler\u2026');
       _renderSuggestions(_chatUeKey||ueKey);
     }
