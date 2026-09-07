@@ -2424,19 +2424,8 @@ window._fbCurrentUser = ()=>_currentUser;
       <div class="panel-section-label">Mes liens</div>
       <div class="links-list" id="links-list"></div>
       <button class="add-link-btn" onclick="addLink()">+ Lien (Google Doc, podcast, Amétice…)</button>
-      <div class="panel-section-label" style="margin-top:10px;">📄 Mes documents</div>
-      <div id="panel-docs-list" style="margin-bottom:6px;"></div>
-      <label class="add-link-btn" style="cursor:pointer;display:inline-block;">
-        + Ajouter un PDF / document
-        <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" style="display:none" onchange="addPanelDoc(this)">
-      </label>
     </div>
     <div class="tip-box" id="panel-tip"></div>
-    <!-- Delete buttons -->
-    <div id="panel-delete-section" style="padding:12px 0 4px;border-top:1px solid var(--border);margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
-      <button onclick="panelDeleteWeek()" style="flex:1;padding:7px 10px;border-radius:6px 10px 6px 10px;border:1.5px solid var(--border);background:transparent;font-family:'Nunito',sans-serif;font-size:0.74rem;font-weight:600;cursor:pointer;color:var(--muted);">🗑 Supprimer cette semaine</button>
-      <button onclick="panelDeletePerm()" style="flex:1;padding:7px 10px;border-radius:6px 10px 6px 10px;border:1.5px solid var(--rust);background:transparent;font-family:'Nunito',sans-serif;font-size:0.74rem;font-weight:600;cursor:pointer;color:var(--rust);">🗑 Supprimer définitivement</button>
-    </div>
   </div>
 </div>
 
@@ -2469,7 +2458,7 @@ window._fbCurrentUser = ()=>_currentUser;
 // CONSTANTS
 // ══════════════════════════════════════════════════
 const HOUR_H = 60; // px per hour
-const START_HOUR = 9;
+const START_HOUR = 10;
 const END_HOUR = 22;
 const TOTAL_HOURS = END_HOUR - START_HOUR;
 const COL_W = 130;
@@ -2486,7 +2475,7 @@ function saveStore(d){
 
 // ══════════════════════════════════════════════════
 // SYLLABUS DATA
-// ══════════════════════════════════════════════════  heredite:  {name:'Hérédité et pathologies',  code:'SNR2U08', color:'#C45C1A', objectifs:['Génétique clinique','Pathologies héréditaires'], syllabus:'Hérédité et maladies génétiques humaines.', bibliographie:[]},,  heredite:  {name:'Hérédité et pathologies', code:'SNR2U08', color:'#C45C1A', objectifs:['Génétique clinique','Pathologies héréditaires'], syllabus:'Hérédité et maladies génétiques humaines.', bibliographie:[]}
+// ══════════════════════════════════════════════════
 const SYL = {
   clinique:{color:'#E8614A',code:'HPS1U33',ects:'6 ECTS',volume:'60h',profs:'Gimenez · Vollon',objectifs:['Névroses, psychoses, dépressions','Formes cliniques de l\'angoisse','Méthodes : observation, bilan, étude de cas','Paradigmes : psychanalyse, humaniste, transpersonnel, hypnose'],biblio:['Pedinielli & Gimenez — Les psychoses de l\'adulte','Textes Amétice (obligatoires)'],tip:'Lis Pedinielli dans les 48h après chaque CM. Les paradigmes sont les plus interrogés.'},
   dev:{color:'#E09A00',code:'HPS1U34',ects:'6 ECTS',volume:'60h',profs:'Jover · Scola',objectifs:['Développement précoce 0-3 ans','Moteur, cognitif, langagier','Attachement (Bowlby) — thème le plus interrogé','Gesell, Piaget, Wallon, Bruner'],biblio:['Vauclair — Développement du jeune enfant','Clément & Demont — 21 grandes notions'],tip:'Fais un tableau des 5 auteurs avec leur concept clé. L\'attachement tombe à presque tous les partiels.'},
@@ -2525,90 +2514,78 @@ function defaultEvents(sem){
   const base = sem==='s1' ? [
 
     // ── LUNDI S1 ──
-    {key:'clinique',   title:'Psychologie clinique',          sub:'CM · 10h30',            day:0, startMin:630, endMin:675},
-    {key:'dev',        title:'Psycho développement',          sub:'CM · 11h15',            day:0, startMin:675, endMin:720},
-    {key:'clinique',   title:'Révision — Psycho clinique',    sub:'Fiche / révision',      day:0, startMin:870, endMin:915},
-    {key:'dev',        title:'Psycho développement',          sub:'Fiche auteurs',         day:0, startMin:930, endMin:975},
-    {key:'stats',      title:'Méthodes et statistiques 1',    sub:'Exercices',             day:0, startMin:990, endMin:1035},
-    {key:'sport',      title:'🏃 Sport',                      sub:'Course / marche',       day:0, startMin:1050,endMin:1110, color:'#10B981'},
+    {key:'clinique', title:'Psychologie clinique',        sub:'CM',                  day:0, startMin:630,  endMin:675},
+    {key:'dev',      title:'Psycho développement',        sub:'CM',                  day:0, startMin:675,  endMin:720},
+    {key:'clinique', title:'Révision — Psycho clinique',  sub:'Fiche / révision',    day:0, startMin:870,  endMin:915},
+    {key:'dev',      title:'Psycho développement',        sub:'Fiche auteurs',       day:0, startMin:930,  endMin:975},
+    {key:'stats',    title:'Méthodes et statistiques 1',  sub:'CM',                  day:0, startMin:990,  endMin:1035},
+    {key:'sport',    title:'🏃 Sport',            sub:'Course / marche',     day:0, startMin:1050, endMin:1095, color:'#10B981'},
 
     // ── MARDI S1 ──
-    {key:'dev',        title:'Psycho développement',          sub:'CM · 10h30',            day:1, startMin:630, endMin:675},
-    {key:'stats',      title:'Méthodes et statistiques 1',    sub:'CM · 11h15',            day:1, startMin:675, endMin:720},
-    {key:'dev',        title:'Révision — Psycho développ.',   sub:'Révision active',       day:1, startMin:870, endMin:915},
-    {key:'anglais',    title:'Anglais pour Psychologues',     sub:'HPS1U31 · TD',          day:1, startMin:930, endMin:975},
-    {key:'hsc',        title:'Histoire sciences cerveau',     sub:'CM · 16h30',            day:1, startMin:990, endMin:1035},
-    {key:'sport',      title:'🏃 Sport léger',                sub:'Marche / étirement',    day:1, startMin:1050,endMin:1110, color:'#10B981'},
+    {key:'dev',      title:'Psycho développement',        sub:'CM',                  day:1, startMin:630,  endMin:675},
+    {key:'stats',    title:'Méthodes et statistiques 1',  sub:'CM',                  day:1, startMin:675,  endMin:720},
+    {key:'dev',      title:'Révision — Psycho développ.', sub:'Révision active',     day:1, startMin:870,  endMin:915},
+    {key:'anglais',  title:'Anglais pour psychologues',   sub:'HPS1U31',             day:1, startMin:930,  endMin:975},
+    {key:'hsc',      title:'Histoire sciences cerveau',   sub:'Léger / podcast',     day:1, startMin:990,  endMin:1035},
+    {key:'sport',    title:'🏃 Sport léger',      sub:'Marche / étirement',  day:1, startMin:1050, endMin:1095, color:'#10B981'},
 
-    // ── MERCREDI S1 ──
-    {key:'stats',      title:'Méthodes et statistiques 1',    sub:'CM · 10h30',            day:2, startMin:630, endMin:675},
-    {key:'neuro',      title:'Neurosciences 1',               sub:'CM · 11h15',            day:2, startMin:675, endMin:720},
-    {key:'neuro',      title:'Neurosciences 1',               sub:'Schéma / fiche',        day:2, startMin:870, endMin:915},
-    {key:'methodes',   title:'Méthodes fonctions mentales',   sub:'SNR1U10 · CM',          day:2, startMin:930, endMin:975},
-    {key:'clinique',   title:'Psychologie clinique',          sub:'Révision · 16h30',      day:2, startMin:990, endMin:1035},
-    {key:'sport',      title:'🏃 Sport',                      sub:'Course / marche',       day:2, startMin:1050,endMin:1110, color:'#10B981'},
+    // ── MERCREDI S1 — Journée scientifique ──
+    {key:'neuro',    title:'Neurosciences 1',             sub:'CM',                  day:2, startMin:600,  endMin:660},
+    {key:'neuro',    title:'Neurosciences 1',             sub:'Schéma / fiche',      day:2, startMin:660,  endMin:720},
+    {key:'methodes', title:'Méthodes fonctions mentales', sub:'CM',                  day:2, startMin:840,  endMin:900},
+    {key:'hsc',      title:'Histoire sciences cerveau',   sub:'CM',                  day:2, startMin:900,  endMin:960},
+    {key:'stats',    title:'Méthodes et statistiques 1',  sub:'Exercices approfondis',day:2,startMin:960,  endMin:1020},
+    {key:'sport',    title:'🏃 Sport',            sub:'Course / marche',     day:2, startMin:1020, endMin:1065, color:'#10B981'},
+    {key:'revision', title:'Révision légère',             sub:'Toutes matières',     day:2, startMin:1065, endMin:1095},
 
-    // ── JEUDI S1 ──
-    {key:'methodes',   title:'Méthodes fonctions mentales',   sub:'SNR1U10 · 9h00',        day:3, startMin:540, endMin:600},
-    {key:'hsc',        title:'Histoire sciences cerveau',     sub:'SNR1U09 · 10h00',       day:3, startMin:600, endMin:660},
-    {key:'anglais',    title:'Anglais pour Psychologues',     sub:'HPS1U31 · TD',          day:3, startMin:870, endMin:915},
-    {key:'hsc',        title:'Histoire sciences cerveau',     sub:'Frise / fiche',         day:3, startMin:930, endMin:975},
-    {key:'dev',        title:'Psycho développement',          sub:'Révision · 16h30',      day:3, startMin:990, endMin:1035},
+    // ── JEUDI S1 — OFF ──
 
-    // ── VENDREDI S1 ──
-    {key:'dev',        title:'Psycho développement',          sub:'TD · 10h30',            day:4, startMin:630, endMin:675},
-    {key:'annales',    title:'📝 Annales',                    sub:'Dès semaine 4',         day:4, startMin:675, endMin:720},
-    {key:'revision',   title:'Révision espacée',              sub:'Fiches sem. passée',    day:4, startMin:870, endMin:915},
-    {key:'mtu',        title:'MTU',                           sub:'HPS1U30 · 15h30',       day:4, startMin:930, endMin:975},
-    {key:'anglais',    title:'Anglais pour Psychologues',     sub:'HPS1U31 · 16h30',       day:4, startMin:990, endMin:1035},
-    {key:'sport',      title:'🏃 Sport',                      sub:'Course / marche',       day:4, startMin:1050,endMin:1110, color:'#10B981'},
+    // ── VENDREDI S1 — OFF ──
 
     // ── SAMEDI S1 ──
-    {key:'revision',   title:'🧠 Rattrapage / consolidation', sub:'Toutes matières',       day:5, startMin:600, endMin:720},
-    {key:'sport',      title:'🏃 Sport libre',                sub:'Balade / sport détente',day:5, startMin:900, endMin:960, color:'#10B981'},
+    {key:'revision', title:'Rattrapage / consolidation',  sub:'Matières en retard',  day:5, startMin:600,  endMin:660},
+    {key:'revision', title:'🧠 Flashcards',       sub:'Révision espacée',    day:5, startMin:660,  endMin:720},
+    {key:'annales',  title:'📝 Annales',          sub:'Dès semaine 4',       day:5, startMin:840,  endMin:900},
+    {key:'mtu',      title:'MTU',                         sub:'HPS1U30',             day:5, startMin:900,  endMin:960},
+    {key:'sport',    title:'🏃 Sport libre',      sub:'Balade / sport',      day:5, startMin:960,  endMin:1020, color:'#10B981'},
 
   ] : [
 
     // ── LUNDI S2 ──
-    {key:'cognitive',  title:'Psychologie cognitive',         sub:'CM · 10h30',            day:0, startMin:630, endMin:675},
-    {key:'sociale',    title:'Psychologie sociale',           sub:'CM · 11h15',            day:0, startMin:675, endMin:720},
-    {key:'cognitive',  title:'Révision — Psycho cognitive',   sub:'Fiche / révision',      day:0, startMin:870, endMin:915},
-    {key:'sociale',    title:'Psychologie sociale',           sub:'Fiche / Girandola',     day:0, startMin:930, endMin:975},
-    {key:'stats2',     title:'Méthodes et statistiques 2',    sub:'Exercices',             day:0, startMin:990, endMin:1035},
-    {key:'sport',      title:'🏃 Sport',                      sub:'Course / marche',       day:0, startMin:1050,endMin:1110, color:'#10B981'},
+    {key:'cognitive',title:'Psychologie cognitive',       sub:'CM',                  day:0, startMin:630,  endMin:675},
+    {key:'sociale',  title:'Psychologie sociale',         sub:'CM',                  day:0, startMin:675,  endMin:720},
+    {key:'cognitive',title:'Révision — Psycho cognitive', sub:'Fiche / révision',    day:0, startMin:870,  endMin:915},
+    {key:'sociale',  title:'Psychologie sociale',         sub:'Fiche / Girandola',   day:0, startMin:930,  endMin:975},
+    {key:'stats2',   title:'Méthodes et statistiques 2',  sub:'CM',                  day:0, startMin:990,  endMin:1035},
+    {key:'sport',    title:'🏃 Sport',            sub:'Course / marche',     day:0, startMin:1050, endMin:1095, color:'#10B981'},
 
     // ── MARDI S2 ──
-    {key:'sociale',    title:'Psychologie sociale',           sub:'CM · 10h30',            day:1, startMin:630, endMin:675},
-    {key:'stats2',     title:'Méthodes et statistiques 2',    sub:'CM · 11h15',            day:1, startMin:675, endMin:720},
-    {key:'sociale',    title:'Révision — Psycho sociale',     sub:'Révision active',       day:1, startMin:870, endMin:915},
-    {key:'anglais2',   title:'Anglais pour Psychologues',     sub:'HPS2U31 · TD',          day:1, startMin:930, endMin:975},
-    {key:'genetique',  title:'Génétique et comportement',     sub:'CM · 16h30',            day:1, startMin:990, endMin:1035},
-    {key:'sport',      title:'🏃 Sport léger',                sub:'Marche / étirement',    day:1, startMin:1050,endMin:1110, color:'#10B981'},
+    {key:'sociale',  title:'Psychologie sociale',         sub:'CM',                  day:1, startMin:630,  endMin:675},
+    {key:'stats2',   title:'Méthodes et statistiques 2',  sub:'CM',                  day:1, startMin:675,  endMin:720},
+    {key:'sociale',  title:'Révision — Psycho sociale',   sub:'Révision active',     day:1, startMin:870,  endMin:915},
+    {key:'anglais2', title:'Anglais pour psychologues',   sub:'HPS2U31',             day:1, startMin:930,  endMin:975},
+    {key:'genetique',title:'Génétique et comportement',   sub:'Léger / podcast',     day:1, startMin:990,  endMin:1035},
+    {key:'sport',    title:'🏃 Sport léger',      sub:'Marche / étirement',  day:1, startMin:1050, endMin:1095, color:'#10B981'},
 
-    // ── MERCREDI S2 ──
-    {key:'stats2',     title:'Méthodes et statistiques 2',    sub:'CM · 10h30',            day:2, startMin:630, endMin:675},
-    {key:'neuro2',     title:'Neurosciences 2',               sub:'CM · 11h15',            day:2, startMin:675, endMin:720},
-    {key:'neuro2',     title:'Neurosciences 2',               sub:'Schéma potentiel',      day:2, startMin:870, endMin:915},
-    {key:'heredite',   title:'Hérédité et pathologies',       sub:'SNR2U08 · CM',          day:2, startMin:930, endMin:975},
-    {key:'cognitive',  title:'Psychologie cognitive',         sub:'Révision · 16h30',      day:2, startMin:990, endMin:1035},
-    {key:'sport',      title:'🏃 Sport',                      sub:'Course / marche',       day:2, startMin:1050,endMin:1110, color:'#10B981'},
+    // ── MERCREDI S2 — Journée scientifique ──
+    {key:'neuro2',   title:'Neurosciences 2',             sub:'CM',                  day:2, startMin:600,  endMin:660},
+    {key:'neuro2',   title:'Neurosciences 2',             sub:'Schéma potentiel',    day:2, startMin:660,  endMin:720},
+    {key:'genetique',title:'Génétique et comportement',   sub:'CM',                  day:2, startMin:840,  endMin:900},
+    {key:'heredite', title:'Hérédité et pathologies',     sub:'CM',                  day:2, startMin:900,  endMin:960},
+    {key:'heredite', title:'Hérédité et pathologies',     sub:'⚠️ Imposé', day:2, startMin:960,  endMin:1020, color:'#C45C1A'},
+    {key:'sport',    title:'🏃 Sport',            sub:'Course / marche',     day:2, startMin:1020, endMin:1065, color:'#10B981'},
+    {key:'revision', title:'Révision légère',             sub:'Toutes matières',     day:2, startMin:1065, endMin:1095},
 
-    // ── JEUDI S2 (bloc imposé) ──
-    {key:'genetique',  title:'Génétique et comportement',     sub:'Révision légère · 9h',  day:3, startMin:540, endMin:600},
-    {key:'genetique',  title:'Génétique + Hérédité',          sub:'SNR2U07+08 · 10h-12h',  day:3, startMin:600, endMin:720},
-    {key:'heredite',   title:'Hérédité et pathologies',       sub:'SNR2U08 · ⚠️ imposé',   day:3, startMin:960, endMin:1080, color:'#C45C1A'},
+    // ── JEUDI S2 — OFF ──
 
-    // ── VENDREDI S2 ──
-    {key:'sociale',    title:'Psychologie sociale',           sub:'TD · 10h30',            day:4, startMin:630, endMin:675},
-    {key:'annales',    title:'📝 Annales',                    sub:'Dès semaine 4',         day:4, startMin:675, endMin:720},
-    {key:'revision',   title:'Révision espacée',              sub:'Fiches sem. passée',    day:4, startMin:870, endMin:915},
-    {key:'mtu2',       title:'Méthodologie',                  sub:'HPS2U30 · 15h30',       day:4, startMin:930, endMin:975},
-    {key:'anglais2',   title:'Anglais pour Psychologues',     sub:'HPS2U31 · 16h30',       day:4, startMin:990, endMin:1035},
-    {key:'sport',      title:'🏃 Sport',                      sub:'Course / marche',       day:4, startMin:1050,endMin:1110, color:'#10B981'},
+    // ── VENDREDI S2 — OFF ──
 
     // ── SAMEDI S2 ──
-    {key:'revision',   title:'🧠 Rattrapage / consolidation', sub:'Toutes matières',       day:5, startMin:600, endMin:720},
-    {key:'sport',      title:'🏃 Sport libre',                sub:'Balade / sport détente',day:5, startMin:900, endMin:960, color:'#10B981'},
+    {key:'revision', title:'Rattrapage / consolidation',  sub:'Matières en retard',  day:5, startMin:600,  endMin:660},
+    {key:'revision', title:'🧠 Flashcards',       sub:'Révision espacée',    day:5, startMin:660,  endMin:720},
+    {key:'annales',  title:'📝 Annales',          sub:'Dès semaine 4',       day:5, startMin:840,  endMin:900},
+    {key:'mtu2',     title:'Méthodologie',                sub:'HPS2U30',             day:5, startMin:900,  endMin:960},
+    {key:'sport',    title:'🏃 Sport libre',      sub:'Balade / sport',      day:5, startMin:960,  endMin:1020, color:'#10B981'},
 
   ];
   return base.map((e,i)=>({...e, id:'def_'+sem+'_'+i, custom:false}));
@@ -2723,28 +2700,11 @@ function showDeleteScopePopup(x, y, evtId, sem, isWeekOnly){
   }
   const btnAll=document.createElement('button');
   btnAll.className='scope-btn';
-  btnAll.textContent='🗑 Supprimer cette semaine';
+  btnAll.textContent=isWeekOnly?'🗑 Supprimer':'🗑 Supprimer de toutes les semaines';
   btnAll.onclick=()=>{
     popup.remove();
     if(isWeekOnly){
-      const wd=getWeekData(sem,currentWeek);
-      wd.added=(wd.added||[]).filter(e=>e.id!==evtId);
-      saveWeekData(sem,currentWeek,wd);
-    } else {
-      // Hide for this week only
-      const wd=getWeekData(sem,currentWeek);
-      if(!wd.hidden.includes(evtId)) wd.hidden.push(evtId);
-      saveWeekData(sem,currentWeek,wd);
-    }
-    renderAgenda(sem);
-  };
-  const btnPerm=document.createElement('button');
-  btnPerm.className='scope-btn';
-  btnPerm.style.cssText='color:var(--rust);border-color:var(--rust);';
-  btnPerm.textContent='🗑 Supprimer définitivement (toutes les semaines)';
-  btnPerm.onclick=()=>{
-    popup.remove();
-    if(isWeekOnly){
+      // Remove from week data
       const wd=getWeekData(sem,currentWeek);
       wd.added=(wd.added||[]).filter(e=>e.id!==evtId);
       saveWeekData(sem,currentWeek,wd);
@@ -2757,7 +2717,7 @@ function showDeleteScopePopup(x, y, evtId, sem, isWeekOnly){
   const cancel=document.createElement('button');
   cancel.className='scope-cancel'; cancel.textContent='Annuler';
   cancel.onclick=()=>{ popup.remove(); };
-  popup.appendChild(btnAll); popup.appendChild(btnPerm); popup.appendChild(cancel);
+  popup.appendChild(btnAll); popup.appendChild(cancel);
   popup.style.cssText='position:fixed;left:'+Math.min(x,window.innerWidth-240)+'px;top:'+Math.min(y,window.innerHeight-180)+'px;';
   document.body.appendChild(popup);
   setTimeout(()=>document.addEventListener('click',function h(e){ if(!popup.contains(e.target)){popup.remove();document.removeEventListener('click',h);} }),50);
@@ -2825,24 +2785,17 @@ function renderAgenda(sem){
       const snapped = Math.round(clickedMin/15)*15;
       openAddModal(dayIdx, snapped);
     });
-
-
-    // Long press pour ajouter un bloc (mobile)
-    let _lpTimer=null, _lpMoved=false;
-    col.addEventListener('touchstart',e=>{
+    // Touch support mobile
+    col.addEventListener('touchend',e=>{
       if(e.target.closest('.event')) return;
-      _lpMoved=false;
-      const t=e.touches[0];
-      _lpTimer=setTimeout(()=>{
-        if(_lpMoved) return;
-        const cr=col.getBoundingClientRect();
-        const relY=t.clientY-cr.top-44;
-        const snap=Math.round((((relY/HOUR_H)*60+START_HOUR*60)/15))*15;
-        openAddModal(dayIdx,Math.max(START_HOUR*60,snap));
-      },600);
-    },{passive:true});
-    col.addEventListener('touchmove',()=>{ _lpMoved=true; clearTimeout(_lpTimer); },{passive:true});
-    col.addEventListener('touchend',()=>{ clearTimeout(_lpTimer); },{passive:true});
+      const t=e.changedTouches[0]; if(!t) return;
+      const cr=col.getBoundingClientRect();
+      const relY=t.clientY-cr.top-44;
+      const snap=Math.round((((relY/HOUR_H)*60+START_HOUR*60)/15))*15;
+      e.preventDefault();
+      openAddModal(dayIdx,Math.max(START_HOUR*60,snap));
+    },{passive:false});
+
     dayColsDiv.appendChild(col);
   });
 
@@ -3011,37 +2964,19 @@ function deleteEvent(e, id, sem){
   e.stopPropagation(); e.preventDefault();
   const allEvts=getEventsForWeek(sem,currentWeek);
   const evt=allEvts.find(ev=>ev.id===id);
-  if(!evt) return;
-  const isWeekOnly=!!evt.weekOnly;
-  // If only one choice (week-only), skip popup and delete directly
-  if(isWeekOnly){
-    if(!confirm('Supprimer ce bloc ?')) return;
-    const wd=getWeekData(sem,currentWeek);
-    wd.added=(wd.added||[]).filter(e=>e.id!==id);
-    saveWeekData(sem,currentWeek,wd);
-    renderAgenda(sem);
-  } else {
-    showDeleteScopePopup(e.clientX||window.innerWidth/2, e.clientY||200, id, sem, false);
-  }
+  const isWeekOnly=evt&&!!evt.weekOnly;
+  showDeleteScopePopup(e.clientX, e.clientY, id, sem, isWeekOnly);
 }
 
 // ══════════════════════════════════════════════════
 // RESET
 // ══════════════════════════════════════════════════
 function resetLayout(){
-  // Reset base events
+  if(!confirm('Remettre le planning '+currentSem.toUpperCase()+' à sa version d\'origine ?\n\nTes notes, liens et statuts sont conservés — seul l\'agencement est réinitialisé.')) return;
   events[currentSem] = defaultEvents(currentSem);
   saveEvents(currentSem);
-  // Also clear week-specific data (hidden + added) for all weeks
-  const s = loadStore();
-  for(let w=1; w<=WEEK_COUNT; w++){
-    delete s[weekKey(currentSem, w)];
-  }
-  saveStore(s);
   if(currentPanel) closePanel();
-  updateWeekBar();
   renderAgenda(currentSem);
-  buildLegend(currentSem);
 }
 
 // ══════════════════════════════════════════════════
@@ -3064,8 +2999,8 @@ function openAddModal(dayIdx, startMin){
     cr.appendChild(sw);
   });
   document.getElementById('add-modal').classList.add('open');
-  _addScope='all';
-  setTimeout(()=>{ setScopeAll(); document.getElementById('new-title').focus(); },50);
+  _addScope='all'; setScopeAll();
+  setTimeout(()=>document.getElementById('new-title').focus(),50);
 }
 function closeAddModal(e){
   if(e&&e.target!==document.getElementById('add-modal')) return;
@@ -3080,19 +3015,9 @@ function confirmAdd(){
   const endMin = timeToMin(document.getElementById('new-end').value);
   if(endMin<=startMin){ alert('L\'heure de fin doit être après l\'heure de début.'); return; }
   const id = 'custom_'+Date.now();
-  const newEvt={id, key:'custom_'+id, title, sub, color:selectedColor, day, startMin, endMin, custom:true};
-  if(_addScope==='week'){
-    newEvt.weekOnly=true;
-    const wd=getWeekData(currentSem,currentWeek);
-    wd.added=wd.added||[];
-    wd.added.push(newEvt);
-    saveWeekData(currentSem,currentWeek,wd);
-  } else {
-    events[currentSem].push(newEvt);
-    saveEvents(currentSem);
-  }
+  events[currentSem].push({id, key:'custom_'+id, title, sub, color:selectedColor, day, startMin, endMin, custom:true});
+  saveEvents(currentSem);
   document.getElementById('add-modal').classList.remove('open');
-  _addScope='all';
   renderAgenda(currentSem);
 }
 
@@ -3103,47 +3028,8 @@ let currentPanel = null;
 let syllabusVisible = true;
 let saveTimeout = null;
 
-function panelDeleteWeek(){
-  if(!currentPanel) return;
-  const _id=currentPanel; // save before closePanel clears it
-  const allEvts=getEventsForWeek(currentSem,currentWeek);
-  const evt=allEvts.find(e=>e.id===_id);
-  if(!evt) return;
-  closePanel();
-  if(evt.weekOnly){
-    const wd=getWeekData(currentSem,currentWeek);
-    wd.added=(wd.added||[]).filter(e=>e.id!==_id);
-    saveWeekData(currentSem,currentWeek,wd);
-  } else {
-    const wd=getWeekData(currentSem,currentWeek);
-    if(!wd.hidden.includes(_id)) wd.hidden.push(_id);
-    saveWeekData(currentSem,currentWeek,wd);
-  }
-  renderAgenda(currentSem);
-}
-
-function panelDeletePerm(){
-  if(!currentPanel) return;
-  const _id=currentPanel; // save before closePanel clears it
-  const allEvts=getEventsForWeek(currentSem,currentWeek);
-  const evt=allEvts.find(e=>e.id===_id);
-  if(!evt) return;
-  closePanel();
-  if(evt.weekOnly){
-    const wd=getWeekData(currentSem,currentWeek);
-    wd.added=(wd.added||[]).filter(e=>e.id!==_id);
-    saveWeekData(currentSem,currentWeek,wd);
-  } else {
-    events[currentSem]=events[currentSem].filter(e=>e.id!==_id);
-    saveEvents(currentSem);
-  }
-  renderAgenda(currentSem);
-}
-
 function openPanel(id, sem){
-  // Look in base events AND week-specific events
-  const allEvts = getEventsForWeek(sem, currentWeek);
-  const evt = allEvts.find(e=>e.id===id);
+  const evt = events[sem].find(e=>e.id===id);
   if(!evt) return;
   currentPanel = id;
   const syl = getSyl(evt.key);
@@ -3182,11 +3068,6 @@ function openPanel(id, sem){
   document.getElementById('syl-toggle').textContent='masquer ▲';
 
   document.getElementById('side-panel').classList.add('open');
-  // Always show delete buttons
-  const delSec=document.getElementById('panel-delete-section');
-  if(delSec) delSec.style.display='flex';
-  // Render docs
-  renderPanelDocs();
 }
 // ══════════════════════════════════════════════════
 // POMODORO
@@ -3280,28 +3161,18 @@ function pomoRenderTimer(){
 
 function pomoBeep(freq, vol){
   try{
-    const ctx=getAudioCtx();
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
     const osc=ctx.createOscillator(); const gain=ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
     osc.frequency.value=freq; gain.gain.value=vol;
     osc.start(); osc.stop(ctx.currentTime+0.18);
+    osc.onended=()=>ctx.close();
   }catch(e){}
 }
 
-// Shared AudioContext — unlocked on first touch/click
-let _audioCtx=null;
-function getAudioCtx(){
-  if(!_audioCtx) _audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  if(_audioCtx.state==='suspended') _audioCtx.resume();
-  return _audioCtx;
-}
-// Unlock audio on first user gesture
-document.addEventListener('touchend',()=>{ try{ getAudioCtx(); }catch(e){} },{once:true,passive:true});
-document.addEventListener('click',()=>{ try{ getAudioCtx(); }catch(e){} },{once:true});
-
 function pomoChime(type){
   try{
-    const ctx=getAudioCtx();
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
     if(type==='work'){
       // 3 notes montantes : Do Mi Sol — sonnerie de cloche chaleureuse
       const notes=[523,659,784]; // C5 E5 G5
@@ -3445,51 +3316,6 @@ document.getElementById('panel-notes').addEventListener('input',function(){
   document.getElementById('save-ind').textContent='en train de sauvegarder…';
   saveTimeout=setTimeout(()=>{ persistNotes(); document.getElementById('save-ind').textContent='✓ sauvegardé'; setTimeout(()=>document.getElementById('save-ind').textContent='',1500); },600);
 });
-
-function addPanelDoc(input){
-  if(!input.files||!input.files[0]) return;
-  const file=input.files[0];
-  const saved=getNotes(currentPanel)||{};
-  saved.docs=saved.docs||[];
-  // Store filename only (not full file - too heavy for localStorage)
-  saved.docs.push({name:file.name,size:file.size,added:new Date().toISOString()});
-  saveNotes(currentPanel,saved);
-  renderPanelDocs();
-  // Track for badge
-  const s=loadStore();
-  s.first_pdf_uploaded=true;
-  s.pdf_count=(s.pdf_count||0)+1;
-  s.pdf_subjects=s.pdf_subjects||{};
-  const evt=(getEventsForWeek(currentSem,currentWeek)||[]).find(e=>e.id===currentPanel);
-  if(evt&&evt.key) s.pdf_subjects[evt.key]=true;
-  saveStore(s);
-  checkBadges(currentSem);
-}
-
-function renderPanelDocs(){
-  const list=document.getElementById('panel-docs-list');
-  if(!list) return;
-  const saved=getNotes(currentPanel)||{};
-  const docs=saved.docs||[];
-  list.innerHTML='';
-  docs.forEach((doc,i)=>{
-    const row=document.createElement('div');
-    row.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--border);font-size:0.76rem;';
-    row.innerHTML='📄 <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+doc.name+'</span>'
-      +'<span style="font-size:0.62rem;color:var(--muted);font-family:DM Mono,monospace;">'+Math.round(doc.size/1024)+'Ko</span>'
-      +'<button onclick="removePanelDoc('+i+')" style="border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:0 4px;">✕</button>';
-    list.appendChild(row);
-  });
-}
-
-function removePanelDoc(i){
-  const saved=getNotes(currentPanel)||{};
-  saved.docs=saved.docs||[];
-  saved.docs.splice(i,1);
-  saveNotes(currentPanel,saved);
-  renderPanelDocs();
-}
-
 function persistNotes(){
   if(!currentPanel) return;
   const saved=getNotes(currentPanel);
@@ -3739,35 +3565,6 @@ function countWeekendOff(s){
 }
 
 let _prevEarned=[];
-
-function getWeekActiveDays(){
-  const s=loadStore(); const days=s.active_days||[];
-  const today=new Date(); const weekStart=new Date(today);
-  weekStart.setDate(today.getDate()-today.getDay());
-  return days.filter(d=>new Date(d)>=weekStart).length;
-}
-
-function hasMastery(sem, pct){
-  return (UE_LIST[sem]||[]).some(ue=>{
-    const cards=getCards(sem,ue.key); if(!cards.length) return false;
-    const mastered=cards.filter(card=>getMastery(card)>=pct).length;
-    return Math.round(mastered/cards.length*100)>=pct;
-  });
-}
-
-function hasAllSeancesNoted(sem){
-  return (UE_LIST[sem]||[]).some(ue=>{
-    const seances=getSeances(sem,ue.key);
-    return seances.length>0&&seances.every(s=>(s.notes||s.résumé||'').trim().length>0);
-  });
-}
-
-function hasFullWeekPlan(sem){
-  const evts=events[sem]||[];
-  const days=[0,1,2,3,4];
-  return days.every(d=>evts.some(e=>e.day===d));
-}
-
 function checkBadges(sem){
   const s=loadStore(); const e=events[sem]||[];
   const earned=[...(s.earned_badges||[])];
@@ -4155,6 +3952,36 @@ function renderCoursSidebar(){
 }
 
 
+
+// ══════════════════════════════════════════════════
+// GEMINI API HELPER
+// ══════════════════════════════════════════════════
+async function geminiCall(prompt, imageParts, maxTokens=1000){
+  const key=window.GEMINI_API_KEY||'';
+  if(!key) throw new Error('Clé API Gemini manquante — configure-la dans Réglages');
+  const parts=imageParts?[...imageParts,{text:prompt}]:[{text:prompt}];
+  const resp=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+key,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{role:'user',parts}],generationConfig:{maxOutputTokens:maxTokens,temperature:0.7}})
+  });
+  if(!resp.ok){ const e=await resp.json().catch(()=>({})); throw new Error('Erreur Gemini '+resp.status+': '+(e.error?.message||'')); }
+  const data=await resp.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+}
+
+async function geminiChat(systemPrompt, messages, maxTokens=500){
+  const key=window.GEMINI_API_KEY||'';
+  if(!key) throw new Error('Clé API Gemini manquante — configure-la dans Réglages');
+  const contents=messages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
+  const resp=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+key,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({system_instruction:{parts:[{text:systemPrompt}]},contents,generationConfig:{maxOutputTokens:maxTokens,temperature:0.7}})
+  });
+  if(!resp.ok){ const e=await resp.json().catch(()=>({})); throw new Error('Erreur Gemini '+resp.status+': '+(e.error?.message||'')); }
+  const data=await resp.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+}
+
 // ══════════════════════════════════════════════════
 // PUMPKIN CHAT IA
 // ══════════════════════════════════════════════════
@@ -4267,8 +4094,8 @@ async function sendPumpkinMsg(text){
   }));
 
   // ── Groq API (gratuit) ──
-  const GROQ_KEY = window.GROQ_API_KEY || '';
-  if(!GROQ_KEY){
+  const GROQ_KEY = window.GEMINI_API_KEY || '';
+  if(!GEMINI_KEY){
     document.getElementById('chat-typing-indicator')?.remove();
     _addChatMsg('pumpkin','Cl\u00e9 API manquante \U0001f33f Va dans <strong>R\u00e9glages</strong> et entre ta cl\u00e9 Groq pour que je puisse r\u00e9pondre !');
     _chatLoading=false;
@@ -4276,23 +4103,14 @@ async function sendPumpkinMsg(text){
     return;
   }
   try{
-    const groqMsgs=[{role:'system',content:sys},...apiMsgs];
-    const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-      body:JSON.stringify({model:'llama-3.1-8b-instant',max_tokens:500,messages:groqMsgs,temperature:0.7})
-    });
+    const reply=await geminiChat(sys, apiMsgs, 500);
     document.getElementById('chat-typing-indicator')?.remove();
-    if(!resp.ok){
-      const err=await resp.json().catch(()=>({}));
-      _addChatMsg('pumpkin',resp.status===401?'Cl\u00e9 Groq invalide, v\u00e9rifie dans R\u00e9glages.':'Oups, erreur '+resp.status+'. R\u00e9essaie !');
-    } else {
-      const data=await resp.json();
-      _addChatMsg('pumpkin',data.choices?.[0]?.message?.content||'');
-    }
+    _addChatMsg('pumpkin', reply);
   } catch(e){
     document.getElementById('chat-typing-indicator')?.remove();
-    _addChatMsg('pumpkin','Erreur de connexion. V\u00e9rifie que tu es en ligne !');
+    _addChatMsg('pumpkin', e.message.includes('manquante')
+      ? 'Clé API manquante 🌿 Va dans <strong>Réglages</strong> et entre ta clé Gemini !'
+      : 'Erreur: '+e.message);
   }
 
   _chatLoading=false;
@@ -4535,8 +4353,8 @@ let _showResources=false;
 async function generateFCFromNotes(sem,ueKey){
   const btn=document.getElementById('gen-fc-btn');
   const result=document.getElementById('gen-fc-result');
-  const GROQ_KEY=window.GROQ_API_KEY||'';
-  if(!GROQ_KEY){if(result){result.textContent='Cl\u00e9 API Groq manquante.';result.classList.add('show');}return;}
+  const GEMINI_KEY=window.GEMINI_API_KEY||'';
+  if(!GEMINI_KEY){if(result){result.textContent='Cl\u00e9 API Groq manquante.';result.classList.add('show');}return;}
   const seances=getSeances(sem,ueKey);
   const allNotes=seances.map((s,i)=>{
     const parts=[(s.notes||'').trim(),(s.r\u00e9sum\u00e9||'').trim(),(s.questions||'').trim()].filter(Boolean);
@@ -4549,10 +4367,7 @@ async function generateFCFromNotes(sem,ueKey){
   const context=allNotes||(syl?'Mati\u00e8re: '+matName+'. Objectifs: '+syl.objectifs.join(', '):'');
   const prompt='Tu es un expert en psychologie. G\u00e9n\u00e8re 8 flashcards pour "'+matName+'" bas\u00e9es sur:\n\n'+context.slice(0,3000)+'\n\nR\u00e9ponds UNIQUEMENT en JSON: {"cards":[{"question":"...","answer":"...","theme":"..."}]}';
   try{
-    const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:2000,messages:[{role:'user',content:prompt}],temperature:0.4})});
-    if(!resp.ok) throw new Error('Erreur '+resp.status);
-    const data=await resp.json();
-    let text=data.choices?.[0]?.message?.content||'';
+    const text=await geminiCall(prompt, null, 2000);
     text=text.replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(text);
     if(!parsed.cards||!parsed.cards.length) throw new Error('Format invalide');
@@ -4593,8 +4408,8 @@ async function generateCardsFromDoc(docId,sem,ueKey,statusEl){
   const doc=await idbGet(docId); if(!doc){alert('Document introuvable.');return;}
   const ue=UE_LIST[sem].find(u=>u.key===ueKey);
   const syl=getSyl(ueKey);
-  const GROQ_KEY=window.GROQ_API_KEY||'';
-  if(!GROQ_KEY){alert('Cl\u00e9 API Groq manquante.');return;}
+  const GEMINI_KEY=window.GEMINI_API_KEY||'';
+  if(!GEMINI_KEY){alert('Cl\u00e9 API Groq manquante.');return;}
   if(statusEl) statusEl.textContent='\U0001f4d6 Lecture du PDF\u2026';
   let pdfText='';
   try{
@@ -4608,10 +4423,9 @@ async function generateCardsFromDoc(docId,sem,ueKey,statusEl){
     ?'Expert psychologie L1. Voici le PDF "'+matName+'":\n\n'+pdfText.slice(0,6000)+'\n\nG\u00e9n\u00e8re 15 flashcards PRÉCISES sur ce contenu. JSON uniquement: {"cards":[{"type":"flash","question":"...","answer":"...","theme":"..."}]}'
     :'G\u00e9n\u00e8re 12 flashcards sur "'+matName+'" psychologie L1'+(syl?' (objectifs: '+syl.objectifs.join(', ')+')':'')+'. JSON: {"cards":[{"type":"flash","question":"...","answer":"...","theme":"..."}]}';
   try{
-    const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:4000,messages:[{role:'user',content:prompt}],temperature:0.4})});
-    if(!resp.ok) throw new Error('Erreur '+resp.status);
-    const data=await resp.json();
-    let text=data.choices?.[0]?.message?.content||'';
+    // Gemini peut lire les PDFs directement (scannés inclus)
+    const pdfImageParts=(!pdfText&&doc.data)?[{inline_data:{mime_type:'application/pdf',data:doc.data.split(',')[1]}}]:null;
+    const text=await geminiCall(prompt, pdfImageParts, 4000);
     text=text.replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(text);
     if(!parsed.cards||!parsed.cards.length) throw new Error('Aucune carte');
@@ -4630,16 +4444,13 @@ async function generateCardsFromDoc(docId,sem,ueKey,statusEl){
 }
 
 async function generateCardsFromImage(dataUrl,sem,ueKey,statusEl){
-  const GROQ_KEY=window.GROQ_API_KEY||'';
-  if(!GROQ_KEY){if(statusEl)statusEl.textContent='Cl\u00e9 API manquante.';return;}
+  const GEMINI_KEY=window.GEMINI_API_KEY||'';
+  if(!GEMINI_KEY){if(statusEl)statusEl.textContent='Cl\u00e9 API manquante.';return;}
   const ue=UE_LIST[sem].find(u=>u.key===ueKey),matName=ue?ue.name:ueKey;
   if(statusEl) statusEl.textContent='\u2728 Analyse de l\'image\u2026';
   const base64=dataUrl.split(',')[1],mimeType=dataUrl.split(';')[0].split(':')[1];
   try{
-    const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama-3.2-11b-vision-preview',max_tokens:2000,messages:[{role:'user',content:[{type:'image_url',image_url:{url:'data:'+mimeType+';base64,'+base64}},{type:'text',text:'Expert psychologie L1. Analyse cette image de cours "'+matName+'" et g\u00e9n\u00e8re 8 flashcards. JSON uniquement: {"cards":[{"type":"flash","question":"...","answer":"...","theme":"..."}]}'}]}],temperature:0.4})});
-    if(!resp.ok) throw new Error('Erreur '+resp.status);
-    const data=await resp.json();
-    let text=data.choices?.[0]?.message?.content||'';
+    const text=await geminiCall(prompt, null, 4000);
     text=text.replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(text);
     if(!parsed.cards||!parsed.cards.length) throw new Error('Aucune carte');
@@ -5024,20 +4835,9 @@ Génère 15-25 cartes couvrant les concepts clés du document. Les thèmes doive
 
   try {
     // Groq ne supporte pas les PDFs directement — on envoie juste le prompt
-    const GROQ_KEY2=window.GROQ_API_KEY||'';
-    if(!GROQ_KEY2){ alert('Cl\u00e9 API Groq manquante. Configure-la dans R\u00e9glages.'); return; }
-    const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY2},
-      body:JSON.stringify({
-        model:'llama-3.1-70b-versatile',
-        max_tokens:4000,
-        messages:[{role:'user',content:prompt+' (Note: génère des cartes générales sur ce sujet car le PDF ne peut pas être lu directement.)'}],
-        temperature:0.5
-      })
-    });
-    const data=await resp.json();
-    const text=data.choices?.[0]?.message?.content||'';
+    const GROQ_KEY2=window.GEMINI_API_KEY||'';
+    if(!GROQ_KEY2){ alert('Clé API Gemini manquante. Configure-la dans Réglages.'); return; }
+    const text=await geminiCall(prompt, null, 4000);
     const clean=text.replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(clean);
     if(!parsed.cards||!parsed.cards.length) throw new Error('Aucune carte générée');
@@ -6179,25 +5979,10 @@ function switchView(view){
   if(_activeItem) _activeItem.classList.add('active');
   if(view==='home') renderHome();
   if(view==='suivi') renderSuivi();
-  if(view==='cours'){
-    const _cs=loadStore();
-    if(_cs._lastCourseSem) coursSem=_cs._lastCourseSem;
-    if(_cs._lastUE){currentUE=_cs._lastUE;_showResources=false;}
-    renderCoursSidebar();
-    if(_showResources) renderResourcesView(); else renderCoursMain();
-  }
-  if(view==='fc') renderFCView();
-  if(view==='settings') renderSettings();
+  if(view==='cours'){ renderCoursSidebar(); renderCoursMain(); }
+  if(view==='fc'){ renderFCView(); }
+  if(view==='settings'){ renderSettings(); }
   if(view==='tasks') renderTasks();
-  if(view==='planning'){
-    const _tod=new Date().getDay(); currentDayIdx=_tod===0?6:_tod-1;
-    // Vue Jour par défaut sur mobile
-    if(window.innerWidth<=600 && agendaView==='week') setAgendaView('day');
-    setTimeout(()=>{
-      if(agendaView==='day') renderDayView();
-      else{ const w=document.getElementById('agenda-wrap'); if(w){const now=new Date();const h=now.getHours();if(h>=START_HOUR&&h<END_HOUR){w.scrollTop=Math.max(0,(h-START_HOUR-0.5)*60+44);}}}
-    },50);
-  }
 }
 
 // ══════════════════════════════════════════════════
@@ -6584,19 +6369,19 @@ function renderSettings(){
   </div>
 
   <div class="settings-section">
-    <h3>🤖 Clé API Groq (Pumpkin & Flashcards)</h3>
+    <h3>🤖 Clé API Gemini (Pumpkin & Flashcards)</h3>
     <p style="font-size:0.76rem;color:var(--muted);margin-bottom:12px;line-height:1.5">
-      Groq est <strong>gratuit</strong> — crée un compte sur <strong>console.groq.com</strong>, génère une clé API et colle-la ici. Pumpkin et la génération de flashcards depuis les cours fonctionneront alors.
+      Gemini est <strong>gratuit</strong> — crée un compte sur <strong>aistudio.google.com</strong> → Get API key, génère une clé API et colle-la ici. Pumpkin et la génération de flashcards depuis les cours fonctionneront alors.
     </p>
     <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
       <input type="password" id="groq-key-input"
-        placeholder="gsk_..."
-        value="${loadStore().groq_api_key||''}"
+        placeholder="AIza..."
+        value="${loadStore().gemini_api_key||''}"
         style="flex:1;min-width:180px;padding:8px 11px;border:1.5px solid var(--border);border-radius:6px 10px 6px 10px;font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--text);background:var(--bg);outline:none;">
       <button class="settings-btn primary" onclick="saveGroqKey()">💾 Enregistrer</button>
     </div>
     <div id="groq-key-status" style="font-size:0.68rem;font-family:'DM Mono',monospace;color:var(--moss);height:16px;"></div>
-    <div class="settings-info">Ta clé est stockée localement dans ton navigateur. Elle n'est jamais envoyée ailleurs que vers api.groq.com.</div>
+    <div class="settings-info">Ta clé est stockée localement dans ton navigateur. Elle n'est jamais envoyée ailleurs que vers generativelanguage.googleapis.com.</div>
   </div>
 
   <div class="settings-section" id="pwa-section">
@@ -6672,23 +6457,20 @@ initDarkMode();
 scheduleNotifCheck();
 // Load Groq API key — pre-set for Gwen
 const _GROQ_DEFAULT='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';
-window.GROQ_API_KEY=loadStore().groq_api_key||_GROQ_DEFAULT;
+window.GEMINI_API_KEY=loadStore().groq_api_key||_GROQ_DEFAULT;
 
 function saveGroqKey(){
   const inp=document.getElementById('groq-key-input');
   const key=inp?inp.value.trim():'';
   if(!key) return;
-  const s=loadStore(); s.groq_api_key=key; saveStore(s);
-  window.GROQ_API_KEY=key;
+  const s=loadStore(); s.gemini_api_key=key; saveStore(s);
+  window.GEMINI_API_KEY=key;
   const status=document.getElementById('groq-key-status');
   if(status){ status.textContent='\u2713 Cl\u00e9 enregistr\u00e9e !'; setTimeout(()=>status.textContent='',2000); }
 }
 
 // Auto-detect semestre et semaine
 autoDetectSemAndWeek();
-
-// Vue Jour par défaut sur mobile
-if(window.innerWidth<=600) agendaView='day';
 
 // Render home on load
 renderHome();
