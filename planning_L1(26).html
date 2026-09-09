@@ -4094,24 +4094,27 @@ async function sendPumpkinMsg(text){
     content:m.text.replace(/<[^>]*>/g,'')
   }));
 
-  // ── Groq API (gratuit) ──
+  // ── Groq API ──
   const GROQ_KEY = window.GROQ_API_KEY || '';
-  if(!GEMINI_KEY){
+  if(!GROQ_KEY){
     document.getElementById('chat-typing-indicator')?.remove();
-    _addChatMsg('pumpkin','Cl\u00e9 API manquante \U0001f33f Va dans <strong>R\u00e9glages</strong> et entre ta cl\u00e9 Groq pour que je puisse r\u00e9pondre !');
+    _addChatMsg('pumpkin','Clé API manquante 🌿 Va dans <strong>Réglages</strong> et entre ta clé Groq !');
     _chatLoading=false;
     if(sendBtn) sendBtn.disabled=false;
     return;
   }
   try{
-    const reply=await geminiChat(sys, apiMsgs, 500);
+    const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+      body:JSON.stringify({model:'llama-3.1-8b-instant',max_tokens:500,messages:[{role:'system',content:sys},...apiMsgs],temperature:0.7})
+    });
     document.getElementById('chat-typing-indicator')?.remove();
-    _addChatMsg('pumpkin', reply);
+    if(!resp.ok){ _addChatMsg('pumpkin','Erreur '+resp.status+'. Vérifie ta clé Groq dans Réglages.'); }
+    else { const data=await resp.json(); _addChatMsg('pumpkin',data.choices?.[0]?.message?.content||''); }
   } catch(e){
     document.getElementById('chat-typing-indicator')?.remove();
-    _addChatMsg('pumpkin', e.message.includes('manquante')
-      ? 'Clé API manquante 🌿 Va dans <strong>Réglages</strong> et entre ta clé Gemini !'
-      : 'Erreur: '+e.message);
+    _addChatMsg('pumpkin','Erreur de connexion. Vérifie que tu es en ligne !');
   }
 
   _chatLoading=false;
@@ -4369,7 +4372,7 @@ async function generateFCFromNotes(sem,ueKey){
   const prompt='Tu es un expert en psychologie. G\u00e9n\u00e8re 8 flashcards pour "'+matName+'" bas\u00e9es sur:\n\n'+context.slice(0,3000)+'\n\nR\u00e9ponds UNIQUEMENT en JSON: {"cards":[{"question":"...","answer":"...","theme":"..."}]}';
   try{
     const _gk2=window.GROQ_API_KEY||''; if(!_gk2) throw new Error('Clé Groq manquante');
-    const _r2=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+_gk2},body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:2000,messages:[{role:'user',content:prompt}],temperature:0.4})});
+    const _r2=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+_gk2},body:JSON.stringify({model:'llama-3.1-8b-instant',max_tokens:2000,messages:[{role:'user',content:prompt}],temperature:0.4})});
     if(!_r2.ok) throw new Error('Erreur '+_r2.status);
     const _d2=await _r2.json(); const text=_d2.choices?.[0]?.message?.content||'';
     text=text.replace(/```json|```/g,'').trim();
